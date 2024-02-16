@@ -1,12 +1,25 @@
 const express = require('express');
-const controller = require('../controllers/UserController');
+const authController = require('../controllers/UserController');
+const folderController = require('../controllers/FolderController');
+const fileController = require('../controllers/FileController');
+const dontDelete = require('../middleware/dontDelete')
 const router = express.Router();
 const user = require('../models/User');
 
-// localhost:5000/api/login
-router.post('/login', controller.login);
 
-// localhost:5000/api/register
-router.post('/register', controller.register);
+
+router.post('/login', authController.login);
+router.post('/register', authController.register);
+router.post('/logout', authController.logout);
+
+
+router.get('/:foldername', folderController.viewFolder)
+router.post('/create-folder', folderController.createUserFolder)
+router.post('/:foldername/update', folderController.renameFolder)
+router.post('/:foldername/move', folderController.moveFolder)
+
+
+router.post('/:foldername/create', fileController.uploadFile)
+router.delete('/:filename/deletefile', fileController.deleteFile)
 
 module.exports = router;
